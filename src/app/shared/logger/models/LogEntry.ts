@@ -2,6 +2,6 @@ import { LogTypeString } from './LogType';
 import { LogFields } from './LogFields';
 export interface LogEntry {
   type: LogTypeString;
-  message: string;
+  message: any;
   data: LogFields;
 }

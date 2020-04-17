@@ -17,13 +17,18 @@
 
   </header>
   <nav class="subnav">
+    <button class="btn btn-link" (click)="showModal$.next(true)">
+      <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
+      Add Activity
+    </button>
   </nav>
   <div class="content-container">
       <div class="content-area">
-          ...
+        <p-fullCalendar [events]="[]" [options]="options"></p-fullCalendar>
       </div>
-      <nav class="sidenav">
-          ...
+      <nav    class="sidenav">
+
       </nav>
   </div>
 </div>
+<app-activity-form *ngIf="(showModal$|async)" ></app-activity-form>

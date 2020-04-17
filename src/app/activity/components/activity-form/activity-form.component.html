@@ -1,0 +1,24 @@
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false">
+  <h3 class="modal-title">{{ title }}</h3>
+  <div class="modal-body">
+    <form [formGroup]="form" clrForm >
+      <clr-input-container>
+        <label>Title</label>
+        <input clrInput placeholder="activity title" formControlName="title" />
+      </clr-input-container>
+      <clr-date-container>
+        <label>Date start</label>
+        <input clrDate placeholder="activity start date" type="date" name="start" formControlName="start" />
+      </clr-date-container>
+      <clr-date-container>
+        <label>Date End</label>
+        <input clrDate placeholder="activity end date" type="date" name="end"  formControlName="end" />
+      </clr-date-container>
+
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" (click)="send()">Send</button>
+  </div>
+</clr-modal>
