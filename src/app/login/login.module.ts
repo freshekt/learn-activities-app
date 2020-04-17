@@ -31,15 +31,13 @@ import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angul
     AuthGuard,
     {
       provide: AuthServiceConfig,
-      useFactory: () => {
-        console.log({environment});
-        return  new AuthServiceConfig([
+      useFactory: () =>  new AuthServiceConfig([
         {
           id: GoogleLoginProvider.PROVIDER_ID,
           provider: new GoogleLoginProvider(environment.googleClientId)
         }
-      ]);
-    }
+      ])
+
     }
   ]
 })

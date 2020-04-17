@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "find-people-160811": {
+      "hosting": {
+        "activities": [
+          "find-people-160811"
+        ]
+      }
+    }
+  }
+}

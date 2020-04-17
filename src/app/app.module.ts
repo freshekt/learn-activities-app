@@ -3,6 +3,8 @@ import { appReducers } from './store/reducers/app.reducers';
 import { MainModule } from './main/main.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClarityModule } from '@clr/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,8 +21,10 @@ import { environment } from '../environments/environment';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     MainModule,
     LoginModule,
+    ClarityModule,
     StoreModule.forRoot(appReducers),
     EffectsModule.forRoot([LoginEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
