@@ -1,5 +1,5 @@
 import { IUser } from './../../models/IUser';
-import { ELoginActions, SignInSuccess, SignOut, SignOutSuccess } from './../actions/login.actions';
+import { ELoginActions, SignInSuccess, SignOut, SignOutSuccess, GetUser } from './../actions/login.actions';
 import { Injectable } from '@angular/core';
 import {Effect, ofType, Actions} from '@ngrx/effects';
 import { IAppState } from 'src/app/store/state/app.state';
@@ -26,9 +26,20 @@ export class LoginEffects {
   @Effect()
   signOut$ = this.actions$.pipe(
     ofType<SignOut>(ELoginActions.SignOut),
-    switchMap(() => from(this.loginService.signOut$())),
+    withLatestFrom(this.store.pipe(select(selectUser))),
+    switchMap(() => this.loginService.signOut$()),
     switchMap(() => of(new SignOutSuccess()))
   );
+
+  @Effect()
+  getUser$ = this.actions$.pipe(
+    ofType<GetUser>(ELoginActions.GetUser),
+    withLatestFrom(this.store.pipe(select(selectUser))),
+    switchMap(() => this.loginService.getUser$()),
+    switchMap( (user: IUser ) =>  of(new SignInSuccess(user)))
+  );
+
+
 
   constructor(
     private actions$: Actions,

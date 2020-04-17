@@ -5,7 +5,6 @@ export const loginReducer = (
    state = initialLoginState,
    action: LoginActions
    ): ILoginState => {
-
      switch (action.type) {
       case ELoginActions.SignInSuccess: {
         return {

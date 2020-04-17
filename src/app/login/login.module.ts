@@ -1,3 +1,4 @@
+import { LoggerModule } from './../shared/logger/logger.module';
 import { AuthGuard } from './guards/auth.guard';
 import { environment } from './../../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
@@ -6,6 +7,10 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { LoginEffects } from './store/effects/login.effects';
+import { loginReducer } from './store/reducers/login.reducers';
 
 
 @NgModule({
@@ -17,7 +22,10 @@ import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angul
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SocialLoginModule
+    LoggerModule,
+    SocialLoginModule,
+    StoreModule.forRoot(loginReducer),
+    EffectsModule.forRoot([LoginEffects]),
   ],
   exports: [
     BrowserModule,
@@ -25,6 +33,7 @@ import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angul
     FormsModule,
     ReactiveFormsModule,
     SocialLoginModule,
+    LoggerModule,
     LoginComponent
   ],
   providers: [

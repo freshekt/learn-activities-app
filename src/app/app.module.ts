@@ -11,9 +11,11 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { HttpClientModule } from '@angular/common/http';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from '../environments/environment';
+import { LoggerModule } from './shared/logger/logger.module';
 
 @NgModule({
   declarations: [
@@ -21,10 +23,12 @@ import { environment } from '../environments/environment';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MainModule,
     LoginModule,
     ClarityModule,
+    LoggerModule,
     StoreModule.forRoot(appReducers),
     EffectsModule.forRoot([LoginEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),

@@ -1,1 +1,29 @@
-<p>main works!</p>
+<div class="main-container">
+  <div class="alert alert-app-level">
+
+  </div>
+  <header class="header header-6">
+    <h2>Activities</h2>
+     <div class="user-block" >
+       <div *ngIf="isLoggedIn$ | async" >
+       {{(user$|async)?.firstName}}
+       <img [src]="((user$|async)?.photoUrl)"/>
+       <button (click)="signOut()">
+         <clr-icon shape="logout" ></clr-icon>
+        </button>
+      </div>
+        <app-login *ngIf="!(isLoggedIn$ | async)"></app-login>
+      </div>
+
+  </header>
+  <nav class="subnav">
+  </nav>
+  <div class="content-container">
+      <div class="content-area">
+          ...
+      </div>
+      <nav class="sidenav">
+          ...
+      </nav>
+  </div>
+</div>

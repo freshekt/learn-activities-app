@@ -6,6 +6,7 @@ export enum ELoginActions {
   SignOut = '[Login] Sign Out',
   SignInSuccess = '[Login] Sign In Success',
   SignOutSuccess = '[Login] Sign Out  Success',
+  GetUser = '[Login] get User'
 }
 
 export  class SignInSuccess implements Action {
@@ -21,8 +22,12 @@ export  class SignOut implements Action {
   public readonly type = ELoginActions.SignOut;
 }
 
+export  class GetUser implements Action {
+  public readonly type = ELoginActions.GetUser;
+}
+
 export  class SignIn implements Action {
   public readonly type = ELoginActions.SignIn;
 }
 
-export type LoginActions = SignInSuccess | SignOutSuccess | SignIn | SignOut ;
+export type LoginActions = SignInSuccess | SignOutSuccess | SignIn | SignOut | GetUser ;

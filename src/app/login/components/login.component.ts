@@ -1,13 +1,17 @@
+import { LogType } from './../../shared/logger/models/LogType';
+
+import { LoggerService } from './../../shared/logger/services/logger.service';
 import { selectIsLoggedIn } from './../store/selectors/login.selectors';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SocialUser, AuthService, GoogleLoginProvider } from 'angularx-social-login';
 import { IAppState } from 'src/app/store/state/app.state';
 import { Store, select } from '@ngrx/store';
 import { SignIn } from '../store/actions/login.actions';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +24,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   loggedIn$ = this.store.pipe(select(selectIsLoggedIn));
   onDestroy$ = new Subject();
 
-  constructor(private fb: FormBuilder, private store: Store<IAppState>, private router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<IAppState>,
+    private logging: LoggerService,
+    private router: Router) { }
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
@@ -34,13 +42,24 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.loggedIn$.pipe(takeUntil(this.onDestroy$)).subscribe((isLoggedIn) => {
       if (isLoggedIn) {
-        this.router.navigate(['/']);
+       // this.router.navigate(['/']);
+       this.logging.log(LogType.Information , 'user  logged in',
+          {
+            url: '',
+            requestPath: '',
+            elapsedTime: moment().toLocaleString(),
+            userId: null,
+            appVersion: '',
+            environment: environment.production ? 'prod' : 'dev'
+          }
+        );
       }
     });
   }
 
 
   signInWithGoogle(): void {
+
     this.store.dispatch(new SignIn());
   }
 
