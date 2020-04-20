@@ -1,4 +1,4 @@
-import { ActivityModule } from './activity/activity.module';
+
 import { LoginEffects } from './login/store/effects/login.effects';
 import { appReducers } from './store/reducers/app.reducers';
 import { MainModule } from './main/main.module';
@@ -30,7 +30,6 @@ import { LoggerModule } from './shared/logger/logger.module';
     LoginModule,
     ClarityModule,
     LoggerModule,
-    ActivityModule,
     AngularFireModule.initializeApp(environment.firebase),
     StoreModule.forRoot(appReducers),
     EffectsModule.forRoot([LoginEffects]),

@@ -1,24 +1,29 @@
-import { ActivityModule } from './../activity/activity.module';
+import { DatabaseModule } from './../shared/database/database.module';
+
 import { LoginModule } from './../login/login.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ClarityModule } from '@clr/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainComponent } from './components/main/main.component';
+import { ActivitiesComponent } from './components/main/activities.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {FullCalendarModule} from 'primeng/fullcalendar';
+import { ActivityFormComponent } from './components/activity-form/activity-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [ActivitiesComponent, ActivityFormComponent],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DatabaseModule,
     ClarityModule,
     LoginModule,
-    FullCalendarModule,
-    ActivityModule
+    FullCalendarModule
   ]
 })
 export class MainModule { }

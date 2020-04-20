@@ -31,4 +31,4 @@
       </nav>
   </div>
 </div>
-<app-activity-form *ngIf="(showModal$|async)" ></app-activity-form>
+<app-activity-form *ngIf="(showModal$|async)" [userId]="(user$|async).id" ></app-activity-form>

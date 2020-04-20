@@ -1,7 +1,7 @@
 import { environment } from 'src/environments/environment';
-import { LogType } from './../../../shared/logger/models/LogType';
+import { LogType } from '../../../shared/logger/models/LogType';
 import { IAppState } from '../../../store/state/app.state';
-import { selectIsLoggedIn, selectUser } from './../../../login/store/selectors/login.selectors';
+import { selectIsLoggedIn, selectUser } from '../../../login/store/selectors/login.selectors';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { GetUser, SignOut } from '../../../login/store/actions/login.actions';
@@ -14,10 +14,10 @@ import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.less']
+  templateUrl: './activities.component.html',
+  styleUrls: ['./activities.component.less']
 })
-export class MainComponent implements OnInit {
+export class ActivitiesComponent implements OnInit {
 
   isLoggedIn$ = this.store.pipe(select(selectIsLoggedIn));
 
@@ -31,7 +31,6 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(new GetUser());
-    this.user$.subscribe((user) => console.log({user}));
     this.options = {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         defaultDate: moment().format('YYYY-MM-DD'),

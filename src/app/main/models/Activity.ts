@@ -1,4 +1,4 @@
-import { IBaseModel } from './../../shared/database/models/IBaseModel';
+import { IBaseModel } from '../../shared/database/models/IBaseModel';
 
 export class Activity implements IBaseModel<string> {
   id: string;
@@ -6,4 +6,5 @@ export class Activity implements IBaseModel<string> {
   start: string;
   end: string;
   description: string;
+  userId: string;
 }

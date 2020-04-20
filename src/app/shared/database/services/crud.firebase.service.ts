@@ -19,19 +19,19 @@ export class CrudFirebaseService<T extends IBaseModel<string>> implements ICrudS
       .pipe(map(changes => changes.map(s => ({...s.payload.val(), id: s.payload.key} as T))));
    }
 
-  get(id: string): Observable<T> {
+  get$(id: string): Observable<T> {
     return this.enities.pipe(map(entities => entities.find(s => s.id === id)));
   }
-  getAll(): Observable<T[]> {
+  getAll$(): Observable<T[]> {
     return this.enities;
   }
-  add(entity: T): Observable<T> {
+  add$(entity: T): Observable<T> {
    return from(this.entitiesRef.push(entity)).pipe(tap((data) => console.log('added data')), map(() => entity));
   }
-  update(entity: T): Observable<T> {
+  update$(entity: T): Observable<T> {
     return from(this.entitiesRef.update(entity.id, entity)).pipe(map(() => entity));
   }
-  remove(entity: T): Observable<void> {
+  remove$(entity: T): Observable<void> {
     return from(this.entitiesRef.remove(entity.id));
   }
 }
