@@ -1,3 +1,4 @@
+import { IPlaceState, initialPlaceState } from './../../main/store/state/places.state';
 import { initialMainState } from './../../main/store/state/main.state';
 import { initialLoginState } from '../../login/store/state/login.state';
 import {RouterReducerState } from '@ngrx/router-store';
@@ -8,11 +9,13 @@ export interface IAppState {
   router?: RouterReducerState;
   login: ILoginState;
   main: IMainState;
+  places: IPlaceState;
 }
 
 export const initialAppState: IAppState = {
   login: initialLoginState,
-  main: initialMainState
+  main: initialMainState,
+  places: initialPlaceState
 };
 
 export function getIntialState(): IAppState {

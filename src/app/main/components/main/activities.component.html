@@ -27,8 +27,8 @@
         <p-fullCalendar [events]="[]" [options]="options"></p-fullCalendar>
       </div>
       <nav    class="sidenav">
-
+        <h3 *ngIf="selectedDate && selectedDate.length > 0">Date: {{selectedDate}}</h3>
       </nav>
   </div>
 </div>
-<app-activity-form *ngIf="(showModal$|async)" [userId]="(user$|async).id" ></app-activity-form>
+<app-activity-form *ngIf="(showModal$|async)" [userId]="(user$|async).id" [start]="selectedDate" ></app-activity-form>

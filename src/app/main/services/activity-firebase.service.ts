@@ -1,9 +1,8 @@
 import { Activity } from './../models/Activity';
 import { CrudFirebaseService } from './../../shared/database/services/crud.firebase.service';
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database/database';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { AngularFireDatabase } from '@angular/fire/database';
+
 
 @Injectable({
   providedIn: 'root'

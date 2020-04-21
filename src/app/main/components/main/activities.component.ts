@@ -27,6 +27,9 @@ export class ActivitiesComponent implements OnInit {
 
   options: any;
 
+  selectedDate = moment().format('L');
+
+
   constructor(private store: Store<IAppState>, private logging: LoggerService) { }
 
   ngOnInit(): void {
@@ -40,10 +43,10 @@ export class ActivitiesComponent implements OnInit {
             right: 'month, agendaWeek, agendaDay'
         },
         editable: true,
-        dateClick: (date) => {
-          console.log({date});
+        dateClick: ({date}) => {
+          this.selectedDate = moment(date).format('L');
         }
-    }
+    };
   }
 
   signOut() {

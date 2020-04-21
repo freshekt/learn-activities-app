@@ -1,6 +1,7 @@
 import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { selectActivities } from './../selectors/main.selectors';
-import { EActivityActions, RecivedActivity, GetActivity, GetActivities, RecivedActivities, UpdateActivity, DeleteActivity } from './../actions/main.actions';
+import { EActivityActions, RecivedActivity, GetActivity, GetActivities, RecivedActivities,
+   UpdateActivity, DeleteActivity } from './../actions/main.actions';
 import { ActivityFirebaseService } from './../../services/activity-firebase.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -8,7 +9,7 @@ import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/store/state/app.state';
 import { CreateActivity } from '../actions/main.actions';
 import { Activity } from '../../models/Activity';
-import { switchMap, withLatestFrom, filter, map } from 'rxjs/operators';
+import { switchMap, withLatestFrom,  map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable({
@@ -49,7 +50,7 @@ export class MainEffects {
     map(data => data.payload),
     switchMap((data) => this.activityService.update$(data)),
     switchMap((data) => of(new RecivedActivity(data)))
-  )
+  );
 
   @Effect()
   delete$ = this.actions$.pipe(
@@ -58,12 +59,12 @@ export class MainEffects {
     switchMap((data) => this.activityService.remove$(data).pipe(map(() => data))),
     withLatestFrom(this.store.pipe(select(selectActivities))),
     switchMap(([activity, data]) => of(new RecivedActivities(data.filter(s => s.id !== activity.id))))
-  )
+  );
 
 
   constructor(
     private actions$: Actions,
     private store: Store<IAppState>,
     private activityService: ActivityFirebaseService
-  ){}
+  ) {}
 }

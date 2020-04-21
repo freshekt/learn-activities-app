@@ -1,6 +1,7 @@
 
 import { Activity } from './../../models/Activity';
 import { Action } from '@ngrx/store';
+import { ActivityPlace } from '../../models/ActivityPlace';
 
 export enum EActivityActions {
   CreateActivity = '[Activity] Create activity',

@@ -1,20 +1,34 @@
-<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false">
-  <h3 class="modal-title">{{ title }}</h3>
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false" [clrModalStaticBackdrop]="false">
+
+  <h3 class="modal-title">
+    <button aria-label="Close" class="close" type="button">
+      <clr-icon aria-hidden="true" shape="close"></clr-icon>
+  </button>
+    {{ title }}</h3>
   <div class="modal-body">
     <form [formGroup]="form" clrForm >
-      <clr-input-container>
-        <label>Title</label>
-        <input clrInput placeholder="activity title" formControlName="title" />
-      </clr-input-container>
-      <clr-date-container>
-        <label>Date start</label>
-        <input clrDate placeholder="activity start date" type="date" name="start" formControlName="start" />
-      </clr-date-container>
-      <clr-date-container>
-        <label>Date End</label>
-        <input clrDate placeholder="activity end date" type="date" name="end"  formControlName="end" />
-      </clr-date-container>
-
+     <div class="">
+          <clr-input-container>
+          <label>Title</label>
+          <input clrInput placeholder="activity title" formControlName="title" />
+        </clr-input-container>
+        <clr-date-container>
+          <label>Date start</label>
+          <input clrDate placeholder="activity start date" type="date" name="start" formControlName="start" />
+        </clr-date-container>
+        <clr-date-container>
+          <label>Date End</label>
+          <input clrDate placeholder="activity end date" type="date" name="end"  formControlName="end" />
+        </clr-date-container>
+    </div>
+    <div class="">
+      <clr-datalist-container>
+        <input clrDatalistInput formControlName="placeId" placeholder="No label"  />
+        <datalist>
+            <option *ngFor="let item of (places$ |async) " [value]="item"></option>
+        </datalist>
+    </clr-datalist-container>
+    </div>
     </form>
 
   </div>

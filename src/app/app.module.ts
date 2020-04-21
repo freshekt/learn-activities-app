@@ -1,3 +1,4 @@
+import { PlaceEffects } from './main/store/effects/places.effects';
 
 import { LoginEffects } from './login/store/effects/login.effects';
 import { appReducers } from './store/reducers/app.reducers';
@@ -17,6 +18,8 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from '../environments/environment';
 import { LoggerModule } from './shared/logger/logger.module';
+import { MainEffects } from './main/store/effects/main.effects';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +35,7 @@ import { LoggerModule } from './shared/logger/logger.module';
     LoggerModule,
     AngularFireModule.initializeApp(environment.firebase),
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([LoginEffects]),
+    EffectsModule.forRoot([LoginEffects, PlaceEffects, MainEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     AppRoutingModule
   ],

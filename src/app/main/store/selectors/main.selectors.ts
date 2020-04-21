@@ -3,14 +3,14 @@ import { IAppState } from '../../../store/state/app.state';
 import { createSelector } from '@ngrx/store';
 import { Activity } from '../../models/Activity';
 
-export const selectLogin = (state: IAppState) => state.main ;
+export const selectMain = (state: IAppState) => state.main ;
 
 export const selectActivities = createSelector(
-  selectLogin,
+  selectMain,
   (state: IMainState): Activity[] => state.activties
 );
 
 export const selectIsLoading = createSelector(
-  selectLogin,
+  selectMain,
   (state: IMainState) => state.isLoading
 );

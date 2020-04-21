@@ -1,13 +1,10 @@
 import { IBaseModel } from './../models/IBaseModel';
-import { Injectable } from '@angular/core';
 import { ICrudService } from './crud.service';
 import { Observable, from } from 'rxjs';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { map, tap } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+
 export class CrudFirebaseService<T extends IBaseModel<string>> implements ICrudService<T, string> {
 
   entitiesRef: AngularFireList<any>;
