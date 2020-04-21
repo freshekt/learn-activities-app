@@ -1,3 +1,5 @@
+import { selectActivities } from './../../store/selectors/main.selectors';
+import { GetActivities } from './../../store/actions/main.actions';
 import { environment } from 'src/environments/environment';
 import { LogType } from '../../../shared/logger/models/LogType';
 import { IAppState } from '../../../store/state/app.state';
@@ -23,6 +25,8 @@ export class ActivitiesComponent implements OnInit {
 
   user$ = this.store.pipe(select(selectUser));
 
+  events$ = this.store.pipe(select(selectActivities));
+
   showModal$ = new BehaviorSubject(false);
 
   options: any;
@@ -34,6 +38,8 @@ export class ActivitiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(new GetUser());
+    this.store.dispatch(new GetActivities());
+
     this.options = {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         defaultDate: moment().format('YYYY-MM-DD'),

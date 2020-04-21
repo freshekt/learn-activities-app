@@ -1,3 +1,4 @@
+import { query } from '@angular/animations';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { CrudFirebaseService } from './../../shared/database/services/crud.firebase.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -10,30 +11,38 @@ import { ActivityPlace } from '../models/ActivityPlace';
 })
 export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
 
-  provider: google.maps.places.PlacesService;
+  provider = new BehaviorSubject<google.maps.places.PlacesService>(null);
 
   searchResult$ = new BehaviorSubject<Array<ActivityPlace>>([]);
 
   constructor(db: AngularFireDatabase) {
     super('/places', db);
-    this.provider = new google.maps.places.PlacesService(document.createElement('div'));
   }
 
+  init(map: google.maps.Map) {
+    this.provider.next(new google.maps.places.PlacesService(map));
+  }
 
-  serarch(query: string): Observable<ActivityPlace[]> {
-      console.log({query});
-      this.provider.textSearch({query}, (results: google.maps.places.PlaceResult[]) => {
-        console.log({results});
-        this.searchResult$.next(results.map(place => ({
-                  lat: place.geometry.location.lat(),
-                  lng: place.geometry.location.lng(),
-                  name: place.name,
-                  id: place.place_id,
-                  formattedAddress: place.formatted_address
-                })));
+  serarch$(query: string): Observable<ActivityPlace[]> {
+     if (query && query.length > 0) {
+      this.searchResult$.next([]);
+      this.provider.value.textSearch({query}, (results: google.maps.places.PlaceResult[]) => {
+        if (results !== null) {
+          console.log();
+          this.searchResult$.next(results.map(place => ({
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                name: place.name,
+                id: place.id,
+                place_id: place.place_id,
+                formattedAddress: place.formatted_address
+              })));
+            }
         });
 
-        return this.searchResult$.asObservable();
+      }
+
+     return this.searchResult$.asObservable();
   }
 
 

@@ -23,6 +23,7 @@ export const placeReducer = (
           isLoading: false
         };
       }
+      case EActivityPlaceActions.SearchPlaces:
       case EActivityPlaceActions.GetActivityPlaces:
       case EActivityPlaceActions.GetActivityPlace: {
         return {

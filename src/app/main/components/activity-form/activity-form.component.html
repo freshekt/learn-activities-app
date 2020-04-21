@@ -1,4 +1,4 @@
-<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false" [clrModalStaticBackdrop]="false">
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false" [clrModalStaticBackdrop]="false" [clrModalSize]="'xl'">
 
   <h3 class="modal-title">
     <button aria-label="Close" class="close" type="button">
@@ -6,8 +6,8 @@
   </button>
     {{ title }}</h3>
   <div class="modal-body">
-    <form [formGroup]="form" clrForm >
-     <div class="">
+    <form [formGroup]="form" clrForm  style="display: flex;">
+     <div style="flex: 1;">
           <clr-input-container>
           <label>Title</label>
           <input clrInput placeholder="activity title" formControlName="title" />
@@ -20,14 +20,33 @@
           <label>Date End</label>
           <input clrDate placeholder="activity end date" type="date" name="end"  formControlName="end" />
         </clr-date-container>
+        <clr-datalist-container [hidden]="(selectedPlace$ | async ) !== null && (selectedPlace$ | async ) !== undefined">
+
+          <label>Place</label>
+          <input clrDatalistInput formControlName="placeId" placeholder="enter place"  autocomplete="off" />
+          <datalist>
+              <option *ngFor="let item of (places$ |async)" [value]="item.id">{{item.formattedAddress}}</option>
+          </datalist>
+
+      </clr-datalist-container>
+      <div *ngIf="(selectedPlace$ | async )" >
+            {{(selectedPlace$ | async ).formattedAddress}} <button  (click)="changePlace($event)" class="btn btn-primary">change</button>
+      </div>
+      <clr-textarea-container>
+        <label>Description</label>
+        <textarea clrTextarea  formControlName="description" ></textarea>
+      </clr-textarea-container>
     </div>
-    <div class="">
-      <clr-datalist-container>
-        <input clrDatalistInput formControlName="placeId" placeholder="No label"  />
-        <datalist>
-            <option *ngFor="let item of (places$ |async) " [value]="item"></option>
-        </datalist>
-    </clr-datalist-container>
+    <div  style="flex: 1;">
+
+
+    <ngui-map zoom="13"  class="map-container" (mapReady$)="onMapReady($event)">
+      <marker *ngIf="selectedPlace$ | async"
+            [title]="(selectedPlace$ | async).name"
+            [position]="{lat:(selectedPlace$ | async).lat, lng: (selectedPlace$ | async).lng}">
+
+      </marker>
+    </ngui-map>
     </div>
     </form>
 

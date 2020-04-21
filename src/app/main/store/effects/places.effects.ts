@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
 import { IAppState } from 'src/app/store/state/app.state';
-import { switchMap, withLatestFrom,  map, tap } from 'rxjs/operators';
+import { switchMap, withLatestFrom,  map, tap, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { EActivityPlaceActions, DeleteActivityPlace, RecivedActivityPlace, CreateActivityPlace,
    GetActivityPlace, GetActivityPlaces, RecivedActivitiePlaces, UpdateActivityPlace, SearchPlaces } from '../actions/places.actions';
@@ -61,15 +61,13 @@ export class PlaceEffects {
   @Effect()
   search$ = this.actions$.pipe(
     ofType<SearchPlaces>(EActivityPlaceActions.SearchPlaces),
-    map(data =>{
-      console.log(data);
-      return data.payload; }),
-    switchMap((query) => {
-      console.log({query});
-      return this.placeService.serarch(query);
-      }),
-    switchMap(() => this.placeService.searchResult$),
-    switchMap((results) => of(new RecivedActivitiePlaces(results)))
+    map(data => data.payload),
+    filter( (data: string) => data && data.length > 0),
+    switchMap((queryStr: string) => this.placeService.serarch$(queryStr)),
+    withLatestFrom(this.store.pipe(select(selectPlaces))),
+    switchMap(([results, data ]) => of(new RecivedActivitiePlaces(
+      [...results.filter(s => !data.some(p => p.id === s.id) ), ...data].slice(0, 20))
+      ))
   );
 
 
