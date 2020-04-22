@@ -1,0 +1,16 @@
+<div class="autocomplete">
+  <clr-input-container [hidden]="(selectedPlace$ | async ) !== null">
+  <label>{{label}}</label>
+  <input clrInput placeholder="activity title" [formControl]="control"  autocomplete="off"/>
+
+</clr-input-container>
+<div class="dropdpwn" *ngIf="(selectedPlace$ | async ) === null" >
+  <div *ngFor="let item of places" >
+    <strong>{{item.formattedAddress}}</strong>
+    <button class="btn btn-primary" (click)="add(item)">Add</button>
+  </div>
+</div>
+<div *ngIf="(selectedPlace$ | async )" >
+  {{(selectedPlace$ | async ).formattedAddress}} <button  (click)="changePlace($event)" class="btn btn-primary">change</button>
+</div>
+</div>

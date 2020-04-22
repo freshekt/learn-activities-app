@@ -1,0 +1,10 @@
+<div  class="event">
+  <div><strong>Title</strong>: {{event.title}}</div>
+  <div><strong>Start</strong>: {{event.start}}</div>
+  <div><strong>End</strong>: {{event.end}}</div>
+  <div><strong>Description</strong>: {{event.description}}</div>
+  <div class="event__controls" >
+    <button class="btn" (click)="editableModel$.next(event)">Edit</button>
+    <button class="btn" (click)="remove($event)">Delete</button>
+  </div>
+</div>

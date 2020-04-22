@@ -7,4 +7,5 @@ export class Activity implements IBaseModel<string> {
   end: string;
   description: string;
   userId: string;
+  placeId: string;
 }

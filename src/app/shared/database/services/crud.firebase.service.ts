@@ -23,7 +23,8 @@ export class CrudFirebaseService<T extends IBaseModel<string>> implements ICrudS
     return this.enities;
   }
   add$(entity: T): Observable<T> {
-   return from(this.entitiesRef.push(entity)).pipe(tap((data) => console.log('added data')), map(() => entity));
+    console.log('add$', entity);
+    return from(this.entitiesRef.push(entity)).pipe(tap((data) => console.log('added data', data)), map(() => entity));
   }
   update$(entity: T): Observable<T> {
     return from(this.entitiesRef.update(entity.id, entity)).pipe(map(() => entity));

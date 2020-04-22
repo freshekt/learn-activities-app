@@ -1,0 +1,31 @@
+.autocomplete {
+  position: relative;
+.dropdpwn{
+  width: 300px;
+  position: absolute;
+  right:73px;
+  background: #ccc;
+
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  & > div{
+    height: 50px;
+    display: flex;
+    color:#efefef;
+    background: #333;
+    border-radius: 5px;
+    margin: 2px;
+    strong {
+      padding-left: 10px;
+      line-height: 50px;
+      flex: 1;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+
+    }
+  }
+}
+}

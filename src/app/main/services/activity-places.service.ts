@@ -1,4 +1,3 @@
-import { query } from '@angular/animations';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { CrudFirebaseService } from './../../shared/database/services/crud.firebase.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -11,30 +10,33 @@ import { ActivityPlace } from '../models/ActivityPlace';
 })
 export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
 
-  provider = new BehaviorSubject<google.maps.places.PlacesService>(null);
+  provider$ = new BehaviorSubject<google.maps.places.PlacesService>(null);
 
   searchResult$ = new BehaviorSubject<Array<ActivityPlace>>([]);
+  map: google.maps.Map<Element>;
 
   constructor(db: AngularFireDatabase) {
     super('/places', db);
+    this.enities.subscribe((places) => console.log({places}));
   }
 
   init(map: google.maps.Map) {
-    this.provider.next(new google.maps.places.PlacesService(map));
+    this.map = map;
+    this.provider$.next(new google.maps.places.PlacesService(map));
   }
 
   serarch$(query: string): Observable<ActivityPlace[]> {
      if (query && query.length > 0) {
       this.searchResult$.next([]);
-      this.provider.value.textSearch({query}, (results: google.maps.places.PlaceResult[]) => {
+      this.provider$.value.textSearch({query}, (results: google.maps.places.PlaceResult[]) => {
         if (results !== null) {
-          console.log();
+          console.log({query,results});
           this.searchResult$.next(results.map(place => ({
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 name: place.name,
                 id: place.id,
-                place_id: place.place_id,
+                placeId: place.place_id,
                 formattedAddress: place.formatted_address
               })));
             }

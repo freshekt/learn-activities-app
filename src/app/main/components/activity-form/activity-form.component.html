@@ -1,7 +1,7 @@
 <clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false" [clrModalStaticBackdrop]="false" [clrModalSize]="'xl'">
 
   <h3 class="modal-title">
-    <button aria-label="Close" class="close" type="button">
+    <button aria-label="Close" class="close" type="button" (click)="model$.next(null)">
       <clr-icon aria-hidden="true" shape="close"></clr-icon>
   </button>
     {{ title }}</h3>
@@ -20,18 +20,8 @@
           <label>Date End</label>
           <input clrDate placeholder="activity end date" type="date" name="end"  formControlName="end" />
         </clr-date-container>
-        <clr-datalist-container [hidden]="(selectedPlace$ | async ) !== null && (selectedPlace$ | async ) !== undefined">
+        <app-autocomplete label="Place" [control]="form.get('placeId')"></app-autocomplete>
 
-          <label>Place</label>
-          <input clrDatalistInput formControlName="placeId" placeholder="enter place"  autocomplete="off" />
-          <datalist>
-              <option *ngFor="let item of (places$ |async)" [value]="item.id">{{item.formattedAddress}}</option>
-          </datalist>
-
-      </clr-datalist-container>
-      <div *ngIf="(selectedPlace$ | async )" >
-            {{(selectedPlace$ | async ).formattedAddress}} <button  (click)="changePlace($event)" class="btn btn-primary">change</button>
-      </div>
       <clr-textarea-container>
         <label>Description</label>
         <textarea clrTextarea  formControlName="description" ></textarea>
@@ -41,11 +31,6 @@
 
 
     <ngui-map zoom="13"  class="map-container" (mapReady$)="onMapReady($event)">
-      <marker *ngIf="selectedPlace$ | async"
-            [title]="(selectedPlace$ | async).name"
-            [position]="{lat:(selectedPlace$ | async).lat, lng: (selectedPlace$ | async).lng}">
-
-      </marker>
     </ngui-map>
     </div>
     </form>

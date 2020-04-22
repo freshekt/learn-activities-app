@@ -17,18 +17,38 @@
 
   </header>
   <nav class="subnav">
-    <button class="btn btn-link" (click)="showModal$.next(true)">
+    <button class="btn btn-link" (click)="addActivity($event)">
       <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
       Add Activity
     </button>
   </nav>
   <div class="content-container">
       <div class="content-area">
-        <p-fullCalendar [events]="[]" [options]="options"></p-fullCalendar>
+        <clr-tabs>
+          <clr-tab>
+              <button clrTabLink>Calendar</button>
+              <clr-tab-content *clrIfActive>
+                <p-fullCalendar #fc     [events]="events" [options]="options"></p-fullCalendar>
+              </clr-tab-content>
+          </clr-tab>
+          <clr-tab>
+            <button clrTabLink>Map</button>
+            <clr-tab-content *clrIfActive>
+              <ngui-map zoom="13"  class="map-container"  (mapReady$)="onMapReady($event)">
+                <marker *ngFor="let event of (places$|async)"
+                      [title]="event.title"
+                      [position]="{lat: event.lat, lng: event.lng}">
+
+                </marker>
+              </ngui-map>
+            </clr-tab-content>
+        </clr-tab>
+        </clr-tabs>
       </div>
       <nav    class="sidenav">
-        <h3 *ngIf="selectedDate && selectedDate.length > 0">Date: {{selectedDate}}</h3>
+        <h3 >Date: {{selectedDate$ | async}}</h3>
+        <app-activity-item *ngFor="let event of filteredEvents" [editableModel$]="editableModel$" [event]="event"></app-activity-item>
       </nav>
   </div>
 </div>
-<app-activity-form *ngIf="(showModal$|async)" [userId]="(user$|async).id" [start]="selectedDate" ></app-activity-form>
+<app-activity-form *ngIf="(editableModel$|async) !== null" [model$]="editableModel$"   ></app-activity-form>
