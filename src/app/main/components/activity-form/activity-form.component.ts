@@ -6,7 +6,7 @@ import { LogType } from '../../../shared/logger/models/LogType';
 import { LoggerService } from '../../../shared/logger/services/logger.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Activity } from '../../models/Activity';
-import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, of, iif } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
@@ -20,7 +20,7 @@ import { ActivityPlace } from '../../models/ActivityPlace';
 export class ActivityFormComponent implements OnInit, OnDestroy {
 
   opened = true;
-  title = 'New Activity';
+  title = 'Activity';
   @Input() start = moment().format('L');
   @Input() model$: BehaviorSubject<Activity>;
   activity$: Observable<Activity>;
@@ -64,10 +64,10 @@ export class ActivityFormComponent implements OnInit, OnDestroy {
   send() {
 
 
-    const activity: Activity = {... this.model$, ...this.form.value };
+    const activity: Activity = { ...this.form.value };
 
 
-    this.activityService.add$(activity).pipe(
+    ( activity.id.length > 1 ? this.activityService.update$(activity) : this.activityService.add$(activity)).pipe(
       catchError((err) => {
         this.logger.log(LogType.Error, err, {
         url: '',

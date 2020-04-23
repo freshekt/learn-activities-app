@@ -36,7 +36,8 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   places$ = this.store.pipe(select(selectPlaces)).pipe(
     map(places => places.filter( p => this.filteredEvents.some(fe => fe.placeId === p.placeId))),
-    map(places => places.map(p => ({...p, ... this.filteredEvents.find(fe => fe.placeId === p.placeId)})))
+    map(places => places.map(p => ({...p, ... this.filteredEvents.find(fe => fe.placeId === p.placeId)}))),
+    map(places => places.map(p => ({...p, title:`${p.title} - ${p.formattedAddress}` })))
     );
 
   editableModel$ = new BehaviorSubject<Activity>(null);

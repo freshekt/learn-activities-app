@@ -22,6 +22,7 @@ export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
 
   init(map: google.maps.Map) {
     this.map = map;
+    console.log('init map');
     this.provider$.next(new google.maps.places.PlacesService(map));
   }
 

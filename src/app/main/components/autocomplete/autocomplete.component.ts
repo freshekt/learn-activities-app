@@ -51,12 +51,12 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
     this.selectedPlace$.pipe(
       filter(place => place != null),
       withLatestFrom(this.placeService.provider$),
+      map(([place]) => place),
       takeUntil(this.onDestroy$),
-      map(([p])=>p)
       ).subscribe((place) => {
 
         if (this.placeService.map !== undefined && place !== null) {
-          console.log(this.placeService, place);
+
           if (this.marker === undefined) {
 
             this.marker = new google.maps.Marker({
@@ -66,7 +66,6 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
             });
 
           } else {
-
             this.marker.setMap(this.placeService.map);
           }
           this.placeService.map.setCenter(place);
@@ -83,13 +82,13 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
 
     this.placeService.provider$.pipe(
       filter((item) => item != null && this.control.value.length > 0 ),
+      takeUntil(this.onDestroy$),
       switchMap(() => this.places$),
-      map(places => places.find(p => p.placeId === this.control.value)),
-      take(1)
+      map(places => places.find(p => p.placeId === this.control.value))
+
       ).
       subscribe(place => {
       if (place !== null && place !== undefined) {
-        console.log(place);
         this.selectedPlace$.next(place);
       } else {
         this.control.setValue('');
