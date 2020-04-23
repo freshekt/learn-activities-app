@@ -36,6 +36,7 @@ export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
                 name: place.name,
+                userId: '',
                 id: place.id,
                 placeId: place.place_id,
                 formattedAddress: place.formatted_address

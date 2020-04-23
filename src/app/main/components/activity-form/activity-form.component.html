@@ -20,17 +20,28 @@
           <label>Date End</label>
           <input clrDate placeholder="activity end date" type="date" name="end"  formControlName="end" />
         </clr-date-container>
-        <app-autocomplete label="Place" [control]="form.get('placeId')"></app-autocomplete>
+
+        <clr-select-container>
+          <label>Place</label>
+          <select clrSelect  formControlName="placeId">
+            <option *ngFor="let item of places"   [value]="item.placeId" >{{item.name}}</option>
+          </select>
+        </clr-select-container>
 
       <clr-textarea-container>
         <label>Description</label>
         <textarea clrTextarea  formControlName="description" ></textarea>
       </clr-textarea-container>
+
+
     </div>
     <div  style="flex: 1;">
 
 
     <ngui-map zoom="13"  class="map-container" (mapReady$)="onMapReady($event)">
+      <marker *ngIf="selectedPlace$ | async"
+      [title]="(selectedPlace$ | async).name"
+      [position]="{lat:(selectedPlace$ | async).lat, lng: (selectedPlace$ | async).lng}"></marker>
     </ngui-map>
     </div>
     </form>

@@ -1,3 +1,4 @@
+import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { GetActivityPlaces } from './../../store/actions/places.actions';
 import { selectPlaces } from './../../store/selectors/places.selectors';
 import { IAppState } from '../../../store/state/app.state';
@@ -8,6 +9,7 @@ import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef, AfterContentChe
 import { ActivityPlace } from '../../models/ActivityPlace';
 import { map, takeUntil, filter, tap, startWith, switchMap, skipUntil, withLatestFrom, take, takeLast, skip, repeatWhen, skipWhile } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
+import { GetUser } from 'src/app/login/store/actions/login.actions';
 
 @Component({
   selector: 'app-autocomplete',
@@ -20,9 +22,13 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
 
   @Input() label = '';
 
+  @Input() withMap = true;
+
   places: ActivityPlace[] = [];
 
   places$ = this.store.pipe(select(selectPlaces));
+
+  user$ = this.store.pipe(select(selectUser));
 
   selectedPlace$ = new BehaviorSubject<ActivityPlace>(null);
 
@@ -40,6 +46,7 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
   }
 
   ngOnInit(): void {
+    this.store.dispatch(new GetUser())
     this.store.dispatch(new GetActivityPlaces());
 
     this.placeService.searchResult$.next([]);
@@ -117,10 +124,22 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
   }
 
   add(item: ActivityPlace) {
-    this.places$.pipe(
-      switchMap((places) => !places.some(p => p.placeId === item.placeId) ? this.placeService.add$(item) : of(item))).
+    console.log('add', item);
+    this.user$.pipe(
+      tap((user) => item.userId = user.id),
+      withLatestFrom(this.places$),
+      switchMap(([u, places]) =>
+      !places.some(p => p.placeId === item.placeId && p.userId === u.id) ? this.placeService.add$(item) : of(item)),
+      take(1)
+      ).
       subscribe((place) => {
-       this.selectedPlace$.next(place);
+        this.placeService.searchResult$.next([]);
+        console.log('add(item)', item);
+        if (!this.withMap) {
+        this.changePlace(null);
+      } else {
+        this.selectedPlace$.next(place);
+      }
     });
   }
 

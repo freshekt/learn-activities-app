@@ -1,0 +1,14 @@
+
+<h3>Places</h3>
+<div style="width: 375px; position: relative;margin-bottom: 16px;">
+  <app-autocomplete title="" [control]="addControl" [withMap]="false"></app-autocomplete>
+</div>
+<form [formGroup]="form" *ngFor="let form of forms">
+  <div> <strong class="address"> Address: {{form.value.formattedAddress}}</strong></div>
+  <input  formControlName="name"  class="place-input"/>
+  <button class="btn btn-primary" (click)="update(form.value)">update</button>
+  <button class="btn btn-danger" (click)="remove(form.value)">delete</button>
+</form>
+<div style="visibility: hidden;">
+  <ngui-map zoom="13"  class="map-container"  (mapReady$)="onMapReady($event)"> </ngui-map>
+</div>

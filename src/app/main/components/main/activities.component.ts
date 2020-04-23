@@ -35,9 +35,11 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     );
 
   places$ = this.store.pipe(select(selectPlaces)).pipe(
+    withLatestFrom(this.user$),
+    map(([places, user]) => places.filter((e) => e.userId === user.id)),
     map(places => places.filter( p => this.filteredEvents.some(fe => fe.placeId === p.placeId))),
     map(places => places.map(p => ({...p, ... this.filteredEvents.find(fe => fe.placeId === p.placeId)}))),
-    map(places => places.map(p => ({...p, title:`${p.title} - ${p.formattedAddress}` })))
+    map(places => places.map(p => ({...p, title: `${p.title} - ${p.name}` })))
     );
 
   editableModel$ = new BehaviorSubject<Activity>(null);
@@ -56,7 +58,9 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private store: Store<IAppState>, private logging: LoggerService) { }
+  constructor(private store: Store<IAppState>, private logging: LoggerService) {
+
+  }
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
@@ -120,7 +124,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
         }));
   }
 
-  onMapReady(map: google.maps.Map) {
+  onMapReady( map: google.maps.Map) {
     this.places$.pipe(takeUntil(this.onDestroy$)).subscribe((places) => {
        const bounds = new google.maps.LatLngBounds();
        places.forEach(place => bounds.extend(place));
