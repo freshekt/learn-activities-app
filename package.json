@@ -35,8 +35,10 @@
     "@ngrx/store-devtools": "^9.1.0",
     "@ngui/map": "^0.30.3",
     "@types/googlemaps": "^3.39.3",
+    "@types/xlsx": "0.0.36",
     "@webcomponents/webcomponentsjs": "^2.4.3",
     "angularx-social-login": "^2.2.1",
+    "file-saver": "^2.0.2",
     "firebase": "^7.14.1",
     "google-maps": "^4.2.3",
     "install": "^0.13.0",
@@ -46,6 +48,7 @@
     "rxjs": "~6.5.4",
     "ts-xlsx": "0.0.11",
     "tslib": "^1.10.0",
+    "xlsx": "^0.15.6",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

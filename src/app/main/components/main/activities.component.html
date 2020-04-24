@@ -49,6 +49,12 @@
             <app-places-forms [userId]="(user$ |async).id"></app-places-forms>
           </clr-tab-content>
         </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Import / Export</button>
+          <clr-tab-content *clrIfActive>
+            <app-import-export [userId]="(user$ |async).id"></app-import-export>
+          </clr-tab-content>
+        </clr-tab>
         </clr-tabs>
       </div>
       <nav    class="sidenav">

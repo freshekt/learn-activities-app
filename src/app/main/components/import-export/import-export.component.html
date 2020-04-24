@@ -1,0 +1,14 @@
+<div>
+Export Activity file:
+<button class="btn btn-primary" (click)="export(exportType.XSLX)">export xlsx</button>
+</div>
+<div>
+
+  <clr-input-container>
+    <label>Import Activity file:</label>
+    <input placeholder="xlsx file" clrInput type="file"  (change)="inputChange($event)"  name="name" required />
+
+    <clr-control-error>This field is required!</clr-control-error>
+  </clr-input-container>
+  <button class="btn btn-primary" (click)="import(exportType.XSLX)">import xlsx</button>
+</div>
