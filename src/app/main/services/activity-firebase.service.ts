@@ -11,7 +11,6 @@ export class ActivityFirebaseService  extends CrudFirebaseService<Activity> {
 
   constructor(db: AngularFireDatabase) {
     super( '/activities', db);
-    this.enities.subscribe((data)=>console.log(data));
    }
 
 

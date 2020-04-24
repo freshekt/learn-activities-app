@@ -1,3 +1,4 @@
+import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { query } from '@angular/animations';
 import { ActivityPlacesService } from './../../services/activity-places.service';
 import { Injectable } from '@angular/core';
@@ -37,7 +38,8 @@ export class PlaceEffects {
   @Effect()
   getAll$ = this.actions$.pipe(
     ofType<GetActivityPlaces>(EActivityPlaceActions.GetActivityPlaces),
-    switchMap(() => this.placeService.getAll$()),
+    withLatestFrom(this.store.pipe(select(selectUser))),
+    switchMap(([params, user]) => this.placeService.getAll$(ref => ref.orderByChild('userId').equalTo(user.id))),
     switchMap(data => of(new RecivedActivitiePlaces(data)))
   );
 

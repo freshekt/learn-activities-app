@@ -46,7 +46,7 @@
         <clr-tab>
           <button clrTabLink>Places</button>
           <clr-tab-content *clrIfActive>
-            <app-places-forms></app-places-forms>
+            <app-places-forms [userId]="(user$ |async).id"></app-places-forms>
           </clr-tab-content>
         </clr-tab>
         </clr-tabs>

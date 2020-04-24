@@ -87,28 +87,14 @@ export class ActivityFormComponent implements OnInit, OnDestroy {
     const activity: Activity = { ...this.form.value };
     ( activity.id.length > 1 ? this.activityService.update$(activity) : this.activityService.add$(activity)).pipe(
       catchError((err) => {
-        this.logger.log(LogType.Error, err, {
-        url: '',
-        requestPath: '',
-        elapsedTime: moment().toLocaleString(),
-        userId: null,
-        appVersion: '',
-        environment: environment.production ? 'prod' : 'dev'
-      });
+        this.logger.log(LogType.Error, err);
         return of(null) ;
     }),
       take(1)
     ).subscribe((data) => {
       if (data !== null) {
           this.model$.next(null);
-          this.logger.log(LogType.Information, data as any, {
-            url: '',
-            requestPath: '',
-            elapsedTime: moment().toLocaleString(),
-            userId: null,
-            appVersion: '',
-            environment: environment.production ? 'prod' : 'dev'
-          });
+          this.logger.log(LogType.Information, `save activity ${data.title}`);
         }
     });
 

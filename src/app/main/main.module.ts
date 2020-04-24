@@ -13,9 +13,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivityItemComponent } from './components/activity-item/activity-item.component';
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
 import { PlacesFormsComponent } from './components/places-forms/places-forms.component';
+import { ImportExportComponent } from './components/import-export/import-export.component';
 
 @NgModule({
-  declarations: [ActivitiesComponent, ActivityFormComponent, ActivityItemComponent, AutocompleteComponent, PlacesFormsComponent],
+  declarations: [ActivitiesComponent, ActivityFormComponent, ActivityItemComponent, AutocompleteComponent, PlacesFormsComponent, ImportExportComponent],
   imports: [
     CommonModule,
     BrowserModule,

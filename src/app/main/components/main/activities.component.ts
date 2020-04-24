@@ -1,5 +1,5 @@
 import { GetActivityPlaces } from './../../store/actions/places.actions';
-import { map, takeUntil,  tap, withLatestFrom, take } from 'rxjs/operators';
+import { map, takeUntil,  tap, withLatestFrom, take, takeWhile } from 'rxjs/operators';
 import { Activity } from './../../models/Activity';
 import { selectActivities } from './../../store/selectors/main.selectors';
 import { GetActivities } from './../../store/actions/main.actions';
@@ -27,16 +27,11 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   isLoggedIn$ = this.store.pipe(select(selectIsLoggedIn));
 
-  user$ = this.store.pipe(select(selectUser));
+  user$ = this.store.pipe(select(selectUser)).pipe(takeWhile((user) => user !== null));
 
-  events$ = this.store.pipe(select(selectActivities)).pipe(
-    withLatestFrom(this.user$),
-    map(([events, user]) => events.filter((e) => e.userId === user.id))
-    );
+  events$ = this.store.pipe(select(selectActivities));
 
   places$ = this.store.pipe(select(selectPlaces)).pipe(
-    withLatestFrom(this.user$),
-    map(([places, user]) => places.filter((e) => e.userId === user.id)),
     map(places => places.filter( p => this.filteredEvents.some(fe => fe.placeId === p.placeId))),
     map(places => places.map(p => ({...p, ... this.filteredEvents.find(fe => fe.placeId === p.placeId)}))),
     map(places => places.map(p => ({...p, title: `${p.title} - ${p.name}` })))
@@ -145,16 +140,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   signOut() {
-    this.logging.log(LogType.Information , 'user  logged in',
-          {
-            url: '',
-            requestPath: '',
-            elapsedTime: moment().toLocaleString(),
-            userId: null,
-            appVersion: '',
-            environment: environment.production ? 'prod' : 'dev'
-          }
-        );
+    this.logging.log(LogType.Information , 'user  logged in');
     this.store.dispatch(new SignOut());
   }
 

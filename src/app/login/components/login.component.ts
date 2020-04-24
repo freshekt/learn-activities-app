@@ -43,16 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loggedIn$.pipe(takeUntil(this.onDestroy$)).subscribe((isLoggedIn) => {
       if (isLoggedIn) {
        // this.router.navigate(['/']);
-       this.logging.log(LogType.Information , 'user  logged in',
-          {
-            url: '',
-            requestPath: '',
-            elapsedTime: moment().toLocaleString(),
-            userId: null,
-            appVersion: '',
-            environment: environment.production ? 'prod' : 'dev'
-          }
-        );
+       this.logging.log(LogType.Information , 'user  logged in');
       }
     });
   }

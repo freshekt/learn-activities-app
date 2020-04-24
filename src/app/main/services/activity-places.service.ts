@@ -1,3 +1,4 @@
+import { tap } from 'rxjs/operators';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { CrudFirebaseService } from './../../shared/database/services/crud.firebase.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -17,7 +18,6 @@ export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
 
   constructor(db: AngularFireDatabase) {
     super('/places', db);
-    this.enities.subscribe((places) => console.log({places}));
   }
 
   init(map: google.maps.Map) {
@@ -31,7 +31,6 @@ export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
       this.searchResult$.next([]);
       this.provider$.value.textSearch({query}, (results: google.maps.places.PlaceResult[]) => {
         if (results !== null) {
-          console.log({query,results});
           this.searchResult$.next(results.map(place => ({
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
@@ -49,5 +48,8 @@ export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
      return this.searchResult$.asObservable();
   }
 
+  add$(entity: ActivityPlace): Observable<ActivityPlace> {
+    return super.add$(entity).pipe(tap(() => this.searchResult$.next([])));
+  }
 
 }

@@ -1,10 +1,11 @@
+import { LogType } from './../../../shared/logger/models/LogType';
 import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivityPlacesService } from './../../services/activity-places.service';
 import { GetActivityPlaces } from './../../store/actions/places.actions';
 import { LoggerService } from './../../../shared/logger/services/logger.service';
 import { IAppState } from './../../../store/state/app.state';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { selectPlaces } from '../../store/selectors/places.selectors';
@@ -19,22 +20,20 @@ import { GetUser } from 'src/app/login/store/actions/login.actions';
 })
 export class PlacesFormsComponent implements OnInit, OnDestroy {
 
-  onDestroy$ = new Subject();
+  @Input() userId;
 
-  user$ = this.store.pipe(select(selectUser));
+  private onDestroy$ = new Subject();
 
-  places$ = this.store.pipe(select(selectPlaces)).pipe(
-    withLatestFrom(this.user$),
-    map(([places, user]) => places.filter((e) => e.userId === user.id))
-  );
+  places$ = this.store.pipe(select(selectPlaces));
 
   forms: FormGroup[] = [];
 
   addControl = new FormControl('');
 
-
-
-  constructor(private store: Store<IAppState>, private placeService: ActivityPlacesService, private logging: LoggerService) { }
+  constructor(private store: Store<IAppState>,
+     private placeService: ActivityPlacesService,
+     private logging: LoggerService
+     ) { }
 
   ngOnDestroy(): void {
     this.onDestroy$.next();
@@ -42,26 +41,23 @@ export class PlacesFormsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetUser())
     this.store.dispatch(new GetActivityPlaces());
-    this.user$
-    .pipe(
-      withLatestFrom(this.places$),
-      tap(([user, places]) => {
-        this.forms = [];
-        places.forEach(place =>
-        this.forms.push(new FormGroup({
-            id:  new FormControl(place.id),
-            name:  new FormControl(place.name),
-            placeId: new FormControl(place.placeId),
-            userId: new FormControl(user.id),
-            lat: new FormControl(place.lat),
-            lng: new FormControl(place.lng),
-            formattedAddress: new FormControl(place.formattedAddress)
-        })));
-      }),
-      takeUntil(this.onDestroy$)).
-    subscribe(([u,places]) => console.log({places}));
+    this.places$.
+    pipe(takeUntil(this.onDestroy$)).
+    subscribe((places) => {
+      console.log({places});
+      this.forms = [];
+      places.forEach(place =>
+      this.forms.push(new FormGroup({
+          id:  new FormControl(place.id),
+          name:  new FormControl(place.name),
+          placeId: new FormControl(place.placeId),
+          userId: new FormControl(this.userId),
+          lat: new FormControl(place.lat),
+          lng: new FormControl(place.lng),
+          formattedAddress: new FormControl(place.formattedAddress)
+      })));
+    });
   }
 
   onMapReady(map: google.maps.Map) {
@@ -69,11 +65,11 @@ export class PlacesFormsComponent implements OnInit, OnDestroy {
   }
 
   update(place: ActivityPlace) {
-     this.placeService.update$(place).subscribe();
+     this.placeService.update$(place).subscribe(() => this.logging.log(LogType.Information, `updated ${place.name}`));
   }
 
   remove(place: ActivityPlace) {
-    this.placeService.remove$(place).subscribe();
+    this.placeService.remove$(place).subscribe(() => this.logging.log(LogType.Information, `removed ${place.name}`));
   }
 
 }

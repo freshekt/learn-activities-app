@@ -38,9 +38,9 @@ export class MainEffects {
   @Effect()
   getAll$ = this.actions$.pipe(
     ofType<GetActivities>(EActivityActions.GetListActivity),
-    switchMap(() => this.activityService.getAll$()),
     withLatestFrom(this.store.pipe(select(selectUser))),
-    map(([data, user]) => data.filter(s => s.userId === user.id)),
+    switchMap(([params, user]) => this.activityService.getAll$(ref => ref.orderByChild('userId').equalTo(user.id))),
+   // map(([data, user]) => data.filter(s => s.userId === user.id)),
     switchMap(data => of(new RecivedActivities(data)))
   );
 

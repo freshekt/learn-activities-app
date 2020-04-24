@@ -1,3 +1,4 @@
+import { LoggerService } from 'src/app/shared/logger/services/logger.service';
 import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { GetActivityPlaces } from './../../store/actions/places.actions';
 import { selectPlaces } from './../../store/selectors/places.selectors';
@@ -10,6 +11,7 @@ import { ActivityPlace } from '../../models/ActivityPlace';
 import { map, takeUntil, filter, tap, startWith, switchMap, skipUntil, withLatestFrom, take, takeLast, skip, repeatWhen, skipWhile } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { GetUser } from 'src/app/login/store/actions/login.actions';
+import { LogType } from 'src/app/shared/logger/models/LogType';
 
 @Component({
   selector: 'app-autocomplete',
@@ -24,18 +26,22 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
 
   @Input() withMap = true;
 
+  @Input() userId: string;
+
   places: ActivityPlace[] = [];
 
   places$ = this.store.pipe(select(selectPlaces));
-
-  user$ = this.store.pipe(select(selectUser));
 
   selectedPlace$ = new BehaviorSubject<ActivityPlace>(null);
 
   onDestroy$ = new Subject();
   marker: google.maps.Marker;
 
-  constructor(private store: Store<IAppState>, private placeService: ActivityPlacesService, private cnahgeDetector: ChangeDetectorRef) { }
+  constructor(
+    private store: Store<IAppState>,
+    private placeService: ActivityPlacesService,
+    private logger: LoggerService,
+    private cnahgeDetector: ChangeDetectorRef) { }
   ngAfterContentChecked(): void {
     this.cnahgeDetector.detectChanges();
   }
@@ -46,14 +52,16 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
   }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetUser())
     this.store.dispatch(new GetActivityPlaces());
 
     this.placeService.searchResult$.next([]);
     this.placeService.searchResult$.pipe(
-      filter((places) => places.length > 0),
+      filter((places) => !this.withMap || places.length > 0),
       takeUntil(this.onDestroy$)).
-      subscribe(places => this.places = places);
+      subscribe(places => {
+        this.places = places;
+        this.cnahgeDetector.detectChanges();
+      });
 
     this.selectedPlace$.pipe(
       filter(place => place != null),
@@ -121,25 +129,24 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
   changePlace(e: Event) {
     this.selectedPlace$.next(null);
     this.control.setValue('');
+    this.placeService.searchResult$.next([]);
   }
 
   add(item: ActivityPlace) {
-    console.log('add', item);
-    this.user$.pipe(
-      tap((user) => item.userId = user.id),
-      withLatestFrom(this.places$),
-      switchMap(([u, places]) =>
-      !places.some(p => p.placeId === item.placeId && p.userId === u.id) ? this.placeService.add$(item) : of(item)),
+    this.places$.pipe(
+      tap(() => item.userId = this.userId),
+      switchMap((places) =>
+      !places.some(p => p.placeId === item.placeId && p.userId === this.userId) ? this.placeService.add$(item) : of(item)),
       take(1)
       ).
       subscribe((place) => {
-        this.placeService.searchResult$.next([]);
-        console.log('add(item)', item);
+        this.logger.log(LogType.Information, `add place ${place.name}`);
         if (!this.withMap) {
         this.changePlace(null);
       } else {
         this.selectedPlace$.next(place);
       }
+      this.cnahgeDetector.detectChanges();
     });
   }
 

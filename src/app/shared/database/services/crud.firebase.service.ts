@@ -8,29 +8,42 @@ import { map, tap } from 'rxjs/operators';
 export class CrudFirebaseService<T extends IBaseModel<string>> implements ICrudService<T, string> {
 
   entitiesRef: AngularFireList<any>;
-  enities: Observable<T[]>;
 
-  constructor(collectionName: string, db: AngularFireDatabase ) {
-      this.entitiesRef = db.list(collectionName);
-      this.enities = this.entitiesRef.snapshotChanges()
-      .pipe(map(changes => changes.map(s => ({...s.payload.val(), id: s.payload.key} as T))));
+  constructor(private collectionName: string, private db: AngularFireDatabase ) {
+
    }
 
-  get$(id: string): Observable<T> {
-    return this.enities.pipe(map(entities => entities.find(s => s.id === id)));
+  prepareList(filter?) {
+    this.entitiesRef = this.db.list(this.collectionName, filter);
+    return this.entitiesRef.snapshotChanges()
+    .pipe(map(changes => changes.map(s => ({...s.payload.val(), id: s.payload.key} as T))));
   }
-  getAll$(): Observable<T[]> {
-    return this.enities;
+
+  get$(id: string): Observable<T> {
+    return this.prepareList().pipe(map(entities => entities.find(s => s.id === id)));
+  }
+  getAll$(filter?): Observable<T[]> {
+    return this.prepareList(filter);
   }
   add$(entity: T): Observable<T> {
-    console.log('add$', entity);
+    if (this.entitiesRef === undefined)
+    {
+      this.prepareList();
+    }
     return from(this.entitiesRef.push(entity)).pipe(tap((data) => console.log('added data', data)), map(() => entity));
   }
   update$(entity: T): Observable<T> {
-    console.log('update$', entity);
+    if (this.entitiesRef === undefined)
+    {
+      this.prepareList();
+    }
     return from(this.entitiesRef.update(entity.id, entity)).pipe(map(() => entity));
   }
   remove$(entity: T): Observable<void> {
+    if (this.entitiesRef === undefined)
+    {
+      this.prepareList();
+    }
     return from(this.entitiesRef.remove(entity.id));
   }
 }

@@ -1,3 +1,4 @@
+import { Router, ActivationEnd } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import * as moment from 'moment';
@@ -26,19 +27,40 @@ export class LoggerService {
   private buffer: LogEntry[] = [];
   private flush = new Subject<LoggerEvents>();
 
-  constructor( private http: HttpClient) {
+  private  defaultLogFields = {
+    url: '',
+    requestPath: '',
+    elapsedTime: moment().toLocaleString(),
+    userId: null,
+    appVersion: '',
+    environment: environment.production ? 'prod' : 'dev'
+  }
+
+  constructor( private http: HttpClient, private router: Router) {
     this.flush
       .pipe(debounceTime(1000), filter((event) => event === LoggerEvents.Flush))
       .subscribe(() => this.flushBuffer());
+    this.router.events.subscribe((event: ActivationEnd) => {
+        if (event instanceof ActivationEnd) {
+          this.defaultLogFields = {
+            ... this.defaultLogFields,
+            url: event.snapshot.url.map(s => s.toString()).join('/')
+          };
+        }
+     });
   }
 
-  public log(type: LogTypeString, message: string, data: LogFields) {
-    this.buffer.push({
+  public log(type: LogTypeString, message: any, fields?: LogFields) {
+   const data: LogFields  = {
+      ... this.defaultLogFields,
+      ... fields};
+
+   this.buffer.push({
       type,
       message,
       data
     });
-    this.flush.next(LoggerEvents.Flush);
+   this.flush.next(LoggerEvents.Flush);
   }
 
   private flushBuffer() {
