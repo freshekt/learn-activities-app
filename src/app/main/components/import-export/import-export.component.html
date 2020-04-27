@@ -1,14 +1,36 @@
-<div>
-Export Activity file:
-<button class="btn btn-primary" (click)="export(exportType.XSLX)">export xlsx</button>
-</div>
-<div>
+<div style="display: flex;">
+  <div class="import-export-block">
+    <h3>Activities</h3>
+    <div>
+      Export Activity file:
+      <button class="btn btn-primary" (click)="exportActivity(exportType.XLSX)">export xlsx</button>
+      <button class="btn btn-primary" (click)="exportActivity(exportType.CSV)">export csv</button>
+    </div>
+    <div>
 
-  <clr-input-container>
-    <label>Import Activity file:</label>
-    <input placeholder="xlsx file" clrInput type="file"  (change)="inputChange($event)"  name="name" required />
+      <clr-input-container>
+        <label>Import Activity file:</label>
+        <input placeholder="xlsx file" clrInput type="file" (change)="inputActivityChange($event)" name="name" />
 
-    <clr-control-error>This field is required!</clr-control-error>
-  </clr-input-container>
-  <button class="btn btn-primary" (click)="import(exportType.XSLX)">import xlsx</button>
+      </clr-input-container>
+      <button class="btn btn-primary" (click)="importActivity(exportType.XLSX)" [disabled]="impotActivityFile === undefined">import </button>
+    </div>
+  </div>
+  <div class="import-export-block">
+    <h3>Places</h3>
+    <div>
+      Export Places file:
+      <button class="btn btn-primary" (click)="exportPlaces(exportType.XLSX)">export xlsx</button>
+      <button class="btn btn-primary" (click)="exportPlaces(exportType.CSV)">export csv</button>
+    </div>
+    <div>
+
+      <clr-input-container>
+        <label>Import Places file:</label>
+        <input placeholder="xlsx file" clrInput type="file" (change)="inputPlaceChange($event)" />
+
+      </clr-input-container>
+      <button class="btn btn-primary" (click)="importPlaces(exportType.XLSX)" [disabled]="impotPlaceFile === undefined">import </button>
+    </div>
+  </div>
 </div>

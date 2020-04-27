@@ -59,7 +59,10 @@
       </div>
       <nav    class="sidenav">
         <h3 >Date: {{selectedDate$ | async}}</h3>
+       <div style="overflow: auto;">
+
         <app-activity-item *ngFor="let event of filteredEvents" [editableModel$]="editableModel$" [event]="event"></app-activity-item>
+      </div>
       </nav>
   </div>
 </div>
