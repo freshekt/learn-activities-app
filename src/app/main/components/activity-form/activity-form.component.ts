@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environment';
 import { ActivityPlace } from '../../models/ActivityPlace';
 import { Store, select } from '@ngrx/store';
 
+
 @Component({
   selector: 'app-activity-form',
   templateUrl: './activity-form.component.html',

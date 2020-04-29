@@ -18,6 +18,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { selectPlaces } from '../../store/selectors/places.selectors';
 
+
+
 @Component({
   selector: 'app-main',
   templateUrl: './activities.component.html',
@@ -51,11 +53,8 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   isLoading = true;
 
+  constructor(private store: Store<IAppState>, private logging: LoggerService) {}
 
-
-  constructor(private store: Store<IAppState>, private logging: LoggerService) {
-
-  }
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
@@ -75,12 +74,11 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
     this.events$.pipe(
       tap(events => {
         if (events.length > 0 ) {
-        this.isLoading = true;
-        this.events = events.map(s => ({...s,
-        start: moment(s.start).format('YYYY-MM-DD'),
-        end: moment(s.end).format('YYYY-MM-DD')}));
-        this.isLoading = false;
-        console.log({events: this.events});
+          this.isLoading = true;
+          this.events = events.map(s => ({...s,
+          start: moment(s.start).format('YYYY-MM-DD'),
+          end: moment(s.end).format('YYYY-MM-DD')}));
+          this.isLoading = false;
         }
       }),
       withLatestFrom(this.selectedDate$),

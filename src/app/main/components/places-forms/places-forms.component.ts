@@ -11,7 +11,7 @@ import { Store, select } from '@ngrx/store';
 import { selectPlaces } from '../../store/selectors/places.selectors';
 import { tap, takeUntil, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ActivityPlace } from '../../models/ActivityPlace';
-import { GetUser } from 'src/app/login/store/actions/login.actions';
+
 
 @Component({
   selector: 'app-places-forms',
@@ -31,8 +31,8 @@ export class PlacesFormsComponent implements OnInit, OnDestroy {
   addControl = new FormControl('');
 
   constructor(private store: Store<IAppState>,
-     private placeService: ActivityPlacesService,
-     private logging: LoggerService
+              private placeService: ActivityPlacesService,
+              private logging: LoggerService
      ) { }
 
   ngOnDestroy(): void {

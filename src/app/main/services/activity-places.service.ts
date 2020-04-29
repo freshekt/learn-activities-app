@@ -6,6 +6,8 @@ import { Injectable } from '@angular/core';
 import { ActivityPlace } from '../models/ActivityPlace';
 
 
+
+
 @Injectable({
   providedIn: 'root'
 })

@@ -35,10 +35,7 @@
             <button clrTabLink>Map</button>
             <clr-tab-content *clrIfActive>
               <ngui-map zoom="13"  class="map-container"  (mapReady$)="onMapReady($event)">
-                <marker *ngFor="let event of (places$|async)"
-                      [title]="event.title"
-                      [position]="{lat: event.lat, lng: event.lng}">
-
+                <marker *ngFor="let event of (places$|async)"[title]="event.title"[position]="{lat: event.lat, lng: event.lng}">
                 </marker>
               </ngui-map>
             </clr-tab-content>
@@ -59,10 +56,9 @@
       </div>
       <nav    class="sidenav">
         <h3 >Date: {{selectedDate$ | async}}</h3>
-       <div style="overflow: auto;">
-
-        <app-activity-item *ngFor="let event of filteredEvents" [editableModel$]="editableModel$" [event]="event"></app-activity-item>
-      </div>
+        <div style="overflow: auto;">
+          <app-activity-item *ngFor="let event of filteredEvents" [editableModel$]="editableModel$" [event]="event"></app-activity-item>
+        </div>
       </nav>
   </div>
 </div>

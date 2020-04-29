@@ -14,6 +14,7 @@ import { ActivityItemComponent } from './components/activity-item/activity-item.
 import { AutocompleteComponent } from './components/autocomplete/autocomplete.component';
 import { PlacesFormsComponent } from './components/places-forms/places-forms.component';
 import { ImportExportComponent } from './components/import-export/import-export.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [ActivitiesComponent, ActivityFormComponent, ActivityItemComponent, AutocompleteComponent, PlacesFormsComponent, ImportExportComponent],
@@ -27,7 +28,7 @@ import { ImportExportComponent } from './components/import-export/import-export.
     ClarityModule,
     LoginModule,
     FullCalendarModule,
-
+    HttpClientModule,
     NguiMapModule.forRoot({
       apiUrl: 'https://maps.google.com/maps/api/js?libraries=places&language=ru&key=AIzaSyBXu8OmeuVHvYLBXbwW2Eh-r7BM-h6Rm4E'
     })

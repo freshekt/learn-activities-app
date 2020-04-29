@@ -1,17 +1,16 @@
 import { LoggerService } from 'src/app/shared/logger/services/logger.service';
-import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { GetActivityPlaces } from './../../store/actions/places.actions';
 import { selectPlaces } from './../../store/selectors/places.selectors';
 import { IAppState } from '../../../store/state/app.state';
 import { ActivityPlacesService } from './../../services/activity-places.service';
-import { FormControl, AbstractControl } from '@angular/forms';
-import { BehaviorSubject, Subject, iif, of } from 'rxjs';
+import { AbstractControl } from '@angular/forms';
+import { BehaviorSubject, Subject, of } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { ActivityPlace } from '../../models/ActivityPlace';
-import { map, takeUntil, filter, tap, startWith, switchMap, skipUntil, withLatestFrom, take, takeLast, skip, repeatWhen, skipWhile } from 'rxjs/operators';
+import { map, takeUntil, filter, tap, switchMap, withLatestFrom, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { GetUser } from 'src/app/login/store/actions/login.actions';
 import { LogType } from 'src/app/shared/logger/models/LogType';
+
 
 @Component({
   selector: 'app-autocomplete',
@@ -126,7 +125,7 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
      );
   }
 
-  changePlace(e: Event) {
+  changePlace() {
     this.selectedPlace$.next(null);
     this.control.setValue('');
     this.placeService.searchResult$.next([]);
@@ -142,7 +141,7 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
       subscribe((place) => {
         this.logger.log(LogType.Information, `add place ${place.name}`);
         if (!this.withMap) {
-        this.changePlace(null);
+        this.changePlace();
       } else {
         this.selectedPlace$.next(place);
       }
