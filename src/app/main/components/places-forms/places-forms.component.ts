@@ -1,5 +1,4 @@
 import { LogType } from './../../../shared/logger/models/LogType';
-import { selectUser } from './../../../login/store/selectors/login.selectors';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivityPlacesService } from './../../services/activity-places.service';
 import { GetActivityPlaces } from './../../store/actions/places.actions';
@@ -9,7 +8,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { selectPlaces } from '../../store/selectors/places.selectors';
-import { tap, takeUntil, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ActivityPlace } from '../../models/ActivityPlace';
 
 

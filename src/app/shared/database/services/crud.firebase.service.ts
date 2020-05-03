@@ -20,7 +20,7 @@ export class CrudFirebaseService<T extends IBaseModel<string>> implements ICrudS
   }
 
   get$(id: string): Observable<T> {
-    return this.prepareList().pipe(map(entities => entities.find(s => s.id === id)));
+    return this.prepareList().pipe(tap(entities => console.log({entities})), map(entities => entities.find(s => s.id === id)));
   }
   getAll$(filter?): Observable<T[]> {
     return this.prepareList(filter);
@@ -44,6 +44,7 @@ export class CrudFirebaseService<T extends IBaseModel<string>> implements ICrudS
     {
       this.prepareList();
     }
+    console.log('remove$', {entity})
     return from(this.entitiesRef.remove(entity.id));
   }
 }

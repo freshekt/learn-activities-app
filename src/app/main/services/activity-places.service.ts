@@ -28,7 +28,7 @@ export class ActivityPlacesService extends CrudFirebaseService<ActivityPlace> {
     this.provider$.next(new google.maps.places.PlacesService(map));
   }
 
-  serarch$(query: string): Observable<ActivityPlace[]> {
+  search$(query: string): Observable<ActivityPlace[]> {
      if (query && query.length > 0) {
       this.searchResult$.next([]);
       this.provider$.value.textSearch({query}, (results: google.maps.places.PlaceResult[]) => {

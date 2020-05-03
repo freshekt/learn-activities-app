@@ -1,3 +1,5 @@
+import { ImportExportService, ExportTypes } from './../../services/import-export.service';
+import { activityTestProvider, placesTestProvider, mockActivityData, activityAddSpy, placeAddSpy } from './../../services/spys-for-tests';
 import { LoggerModule } from './../../../shared/logger/logger.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -14,11 +16,16 @@ import { MainEffects } from '../../store/effects/main.effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { LoginModule } from 'src/app/login/login.module';
+import { Activity } from '../../models/Activity';
+import { ActivityPlace } from '../../models/ActivityPlace';
+import { of } from 'rxjs';
 
 describe('ImportExportComponent', () => {
   let component: ImportExportComponent;
   let fixture: ComponentFixture<ImportExportComponent>;
-
+  const importExportTestService = jasmine.createSpyObj<ImportExportService<any>>('ImportExportService', ['import', 'export']);
+  const exportSpy = importExportTestService.export.and.returnValue(of(new Blob()));
+  const importSpy = importExportTestService.import.and.returnValue(of(mockActivityData));
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports:[
@@ -42,6 +49,12 @@ describe('ImportExportComponent', () => {
             }
           ]);
         }
+        },
+        activityTestProvider,
+        placesTestProvider,
+        {
+          provide: ImportExportService,
+          useValue: importExportTestService
         }
       ],
       declarations: [ ImportExportComponent ]
@@ -58,4 +71,29 @@ describe('ImportExportComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should export activity', () => {
+    component.exportActivity(ExportTypes.XLSX);
+    expect(exportSpy.calls.any()).toBe(true, 'export called');
+  });
+
+  it('should export places', () => {
+    component.exportPlaces(ExportTypes.XLSX);
+    expect(exportSpy.calls.any()).toBe(true, 'export called');
+  });
+
+  it('should import activity', () => {
+    component.impotActivityFile = new File([], 'test.xlsx');
+    component.importActivity(ExportTypes.XLSX);
+    expect(activityAddSpy.calls.any()).toBe(true, 'import called');
+
+  });
+
+  it('should import places', () => {
+    component.impotPlaceFile = new File([], 'test.xlsx');
+    component.importPlaces(ExportTypes.XLSX);
+    expect(placeAddSpy.calls.any()).toBe(true, 'import called');
+
+  });
+
 });

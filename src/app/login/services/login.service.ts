@@ -26,7 +26,7 @@ export class LoginService {
     return from(this.authService.signOut());
   }
 
-  signIn$(): Observable<any> {
+  signIn$(): Observable<IUser> {
     return from( this.authService.signIn(GoogleLoginProvider.PROVIDER_ID)).pipe(tap(data => console.log(data)));
 
   }

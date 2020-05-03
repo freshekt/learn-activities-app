@@ -65,7 +65,7 @@ export class PlaceEffects {
     ofType<SearchPlaces>(EActivityPlaceActions.SearchPlaces),
     map(data => data.payload),
     filter( (data: string) => data && data.length > 0),
-    switchMap((queryStr: string) => this.placeService.serarch$(queryStr)),
+    switchMap((queryStr: string) => this.placeService.search$(queryStr)),
     withLatestFrom(this.store.pipe(select(selectPlaces))),
     switchMap(([results, data ]) => of(new RecivedActivitiePlaces(
       [...results.filter(s => !data.some(p => p.id === s.id) ), ...data].slice(0, 20))

@@ -121,7 +121,7 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
        return  queryStr;
      }),
      takeUntil(this.onDestroy$)).subscribe(
-      (query) => this.placeService.serarch$(query)
+      (query) => this.placeService.search$(query)
      );
   }
 
