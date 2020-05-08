@@ -86,7 +86,7 @@ export class ActivityFormComponent implements OnInit, OnDestroy {
 
   send() {
     const activity: Activity = { ...this.form.value };
-    ( activity.id.length > 1 ? this.activityService.update$(activity) : this.activityService.add$(activity)).pipe(
+    ( activity.id.length > 0 ? this.activityService.update$(activity) : this.activityService.add$(activity)).pipe(
       catchError((err) => {
         this.logger.log(LogType.Error, err);
         return of(null) ;

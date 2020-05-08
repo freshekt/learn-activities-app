@@ -1,3 +1,4 @@
+import { activityUpdateSpy } from './../../services/spys-for-tests';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ActivityFormComponent } from './activity-form.component';
@@ -21,6 +22,7 @@ import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angul
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { BehaviorSubject } from 'rxjs';
 import { Activity } from '../../models/Activity';
+import { activityAddSpy } from '../../services/spys-for-tests';
 
 describe('ActivityFormComponent', () => {
   let component: ActivityFormComponent;
@@ -82,5 +84,16 @@ describe('ActivityFormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create activity', () => {
+    component.send();
+    expect(activityAddSpy.calls.any()).toBe(true);
+  });
+
+  it('should update activity', () => {
+    component.model$.next({...component.model$.value, id: '1'});
+    component.send();
+    expect(activityUpdateSpy.calls.any()).toBe(true);
   });
 });
