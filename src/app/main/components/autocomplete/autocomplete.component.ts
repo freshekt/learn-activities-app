@@ -40,7 +40,9 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
     private store: Store<IAppState>,
     private placeService: ActivityPlacesService,
     private logger: LoggerService,
-    private cnahgeDetector: ChangeDetectorRef) { }
+    private cnahgeDetector: ChangeDetectorRef) {
+
+    }
   ngAfterContentChecked(): void {
     this.cnahgeDetector.detectChanges();
   }
@@ -61,9 +63,9 @@ export class AutocompleteComponent implements OnInit, OnDestroy, AfterContentChe
         this.places = places;
         this.cnahgeDetector.detectChanges();
       });
-
+    console.log({selectedPlace:this.selectedPlace$});
     this.selectedPlace$.pipe(
-      filter(place => place != null),
+      filter(place => place !== null && place !== undefined),
       withLatestFrom(this.placeService.provider$),
       map(([place]) => place),
       takeUntil(this.onDestroy$),
